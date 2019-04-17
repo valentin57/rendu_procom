@@ -1,0 +1,108 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Modification d'un employé{% endblock %}
+
+{% block content %}
+  <main class="app-content">
+    <div class="app-title">
+      <div>
+        <h1><i class="fa fa-users"></i>&nbsp;Modification d'un employé</h1>
+      </div>
+      <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#"><i class="fa fa-home fa-lg"></i></a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Employés</a>
+        </li>
+        <li class="breadcrumb-item">Modification d'un employé</li>
+      </ul>
+    </div>
+    <div class="tile">
+      <div class="form-horizontal">
+        <section>
+          <h3>Informations générales</h3>
+          <div class="row mt-4">
+            <div class="col-md-8">
+
+              {{ form_start(form) }}
+              <div class="form-group row">
+                {{ form_errors(form.firstName) }}
+                <label class="control-label col-md-3">
+                  {{ form_label(form.firstName) }}
+                </label>
+                <div class="col-md-9">
+                  {{ form_widget(form.firstName, {'attr': {'class': 'form-control'} }) }}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form_errors(form.lastName) }}
+                <label class="control-label col-md-3">
+                  {{ form_label(form.lastName) }}
+                </label>
+                <div class="col-md-9">
+                  {{ form_widget(form.lastName, {'attr': {'class': 'form-control'} }) }}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                {{ form_errors(form.email) }}
+                <label class="control-label col-md-3">
+                  {{ form_label(form.email) }}
+                </label>
+                <div class="col-md-9">
+                  {{ form_widget(form.email, {'attr': {'class': 'form-control'} }) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <hr/>
+        <section>
+          <h3>Production</h3>
+          <div class="row mt-4">
+            <div class="col-md-8">
+              <div class="form-group row">
+                {{ form_errors(form.job) }}
+                <label for="select-job" class="control-label col-md-3">
+                  {{ form_label(form.job) }}
+                </label>
+                <div class="col-md-9">
+                  {{ form_widget(form.job, {'attr': {'class': 'form-control'} }) }}
+                </div>
+              </div>
+              <div class="form-group row">
+                {{ form_errors(form.dailyCost) }}
+                <label class="control-label col-md-3">
+                  {{ form_label(form.dailyCost) }}
+                </label>
+                <div class="col-md-9">
+                  {{ form_widget(form.dailyCost, {'attr': {'class': 'form-control', 'min': 0} }) }}
+                </div>
+              </div>
+              <div class="form-group row">
+                {{ form_errors(form.hiringDate) }}
+                <label class="control-label col-md-3">
+                  {{ form_label(form.hiringDate) }}
+                </label>
+                <div class="col-md-9">
+                  {{ form_widget(form.hiringDate, {'attr': {'class': 'form-control'} }) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <hr/>
+        <div class="row">
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Modifier</button>
+          </div>
+        </div>
+
+          {{ form_end(form) }}
+
+        </div>
+    </div>
+  </main>
+{% endblock %}

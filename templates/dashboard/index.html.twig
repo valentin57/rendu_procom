@@ -1,0 +1,168 @@
+{% extends 'layout.html.twig' %}
+
+{% block javascripts %}
+  <!-- Specific page JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js" integrity="sha256-oSgtFCCmHWRPQ/JmR4OoZ3Xke1Pw4v50uh6pLcu+fIc=" crossorigin="anonymous"></script>
+  <script>
+    var ratioData = [{{ ratioCapexOpex }}, {{ ratioCapexOpex-100 }}];
+    var deliveredData = [{{ totalProjectsDelivered }}, {{ totalProjectsDelivered-100 }}];
+  </script>
+  <script src="{{ asset('js/dashboard.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="widget-small info coloured-icon">
+              <i class="icon fa fa-spinner fa-3x" aria-hidden="true"></i>
+              <div class="info">
+                <p class="text-muted text-sm text-uppercase">Projets en cours</p>
+                <p><strong>{{ projectsNotDelivered }}</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="widget-small warning coloured-icon">
+              <i class="icon fa fa-check-square-o fa-3x" aria-hidden="true"></i>
+              <div class="info">
+                <p class="text-muted text-sm text-uppercase">Projets livrés</p>
+                <p><strong>{{ projectsDelivered }}</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="widget-small primary coloured-icon">
+              <i class="icon fa fa-users fa-3x"></i>
+              <div class="info">
+                <p class="text-muted text-sm text-uppercase">Employés</p>
+                <p><strong>{{ employees }}</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="widget-small danger coloured-icon">
+              <i class="icon fa fa-calendar-check-o fa-3x" aria-hidden="true"></i>
+              <div class="info">
+                <p class="text-muted text-sm text-uppercase">Jours de production</p>
+                <p><strong>{% for sumTime in sumProjectTime %}{{ sumTime|join }}{% endfor %}</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card text-uppercase">
+              <div class="card-header text-center">Rentabilité</div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-6 col-xs-6 text-muted">
+                    <p><i class="fa fa-database mr-2 text-primary"></i> {{ ratioCapexOpex }}% CAPEX</p>
+                  </div>
+                </div>
+                <div class="embed-responsive embed-responsive-16by9">
+                  <canvas id="ratio-chart" class="embed-responsive-item"></canvas>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-uppercase">
+              <div class="card-header text-center">Taux de livraison</div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-6 col-xs-6 text-muted">
+                    <p><i class="fa fa fa-check-square-o mr-2 text-primary"></i> {{ totalProjectsDelivered }}% Livrés</p>
+                  </div>
+                </div>
+                <div class="embed-responsive embed-responsive-16by9">
+                  <canvas id="delivered-chart" class="embed-responsive-item"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header text-center text-uppercase">Top employé</div>
+              <div class="card-body">
+                {% for topEmploy in topEmployee %}
+                <div class="text-center">
+                  <img src="{{ asset('img/ui-zac.jpg') }}" class="rounded-circle" width="58">
+                  <p class="mt-2">
+                    <strong>{{ topEmploy.employee.firstName }} {{ topEmploy.employee.lastName }}</strong>
+                  </p>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <p class="small mt">EMPLOYE DEPUIS</p>
+                    <p>{{ topEmploy.employee.hiringDate|date('Y') }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="small mt">TOTAL DEPENSE</p>
+                    <p>{{ topEmploy.cost }} €</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="tile table-responsive">
+          <table class="table table-hover table-striped table-sm">
+            <thead>
+            <tr>
+              <th>Projet</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Coût</th>
+              <th>Est livré</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if projects is not empty %}
+
+                {% for project in projects %}
+                <tr>
+                  <th>
+                    <a href="{{ path('projectsList') }}">{{ project.title|capitalize }}</a>
+                  </th>
+                  <th>{{ project.type|upper }}</th>
+                  <th>{{ project.createdAt|localizeddate('none', 'none', null, null, 'd/MM/Y') }}</th>
+                  <th></th>
+                  <th>
+                    {% if project.isDelivered == 1 %}<span class="badge badge-success">OUI</span>{% else %}<span class="badge badge-danger">NON{% endif %}</span>
+                  </th>
+                </tr>
+              {% endfor %}
+
+            {% else %}
+              <tr>
+                Aucun projet trouvé.
+              </tr>
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="tile">
+          <h3 class="tile-title text-center">Temps de production</h3>
+          <ul class="list-group">
+            {% for prodTime in prodTimes %}
+            <li class="list-group-item">
+              <a href="{{ path('viewEmployee', {'id':prodTime.employee.id}) }}">{{ prodTime.employee.firstName }} {{ prodTime.employee.lastName }}</a> a travaillé sur <a href="{{ path('projectsList') }}">{{ prodTime.project.title }}</a>
+              <div class="text-muted font-italic text-right">{{ prodTime.time }} jours</div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

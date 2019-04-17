@@ -1,0 +1,50 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Ajout d'un métier{% endblock %}
+
+{% block content %}
+  <main class="app-content">
+    <div class="app-title">
+      <div>
+        <h1><i class="fa fa-book"></i>&nbsp;Ajout d'un métier</h1>
+      </div>
+      <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#"><i class="fa fa-home fa-lg"></i></a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Métiers</a>
+        </li>
+        <li class="breadcrumb-item">Ajout d'un métier</li>
+      </ul>
+    </div>
+    <div class="tile">
+      <div class="form-horizontal">
+        <section>
+          <h3>Formulaire d'ajout</h3>
+          <div class="row mt-4">
+            <div class="col-md-8">
+              {{ form_start(form) }}
+              <div class="form-group row">
+                {{ form_errors(form.name) }}
+                {{ form_label(form.name) }}
+                <div class="col-md-4">
+                  {{ form_widget(form.name, {'attr': {'class': 'form-control'} }) }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <hr/>
+        <div class="row">
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i>Ajouter</button>
+          </div>
+        </div>
+
+        {{ form_end(form) }}
+
+      </div>
+    </div>
+  </main>
+{% endblock %}
